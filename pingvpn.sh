@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 echo 'vpn script is running'
 active=$(nmcli con show --active |grep vpn|awk '{print $1}')
 if [ -z $active ]; then
