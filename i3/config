@@ -162,5 +162,5 @@ bar {
         font pango:DejaVu Sans Mono 10
 }
 
-exec_always DISPLAY=:0 /usr/bin/feh --bg-max --no-fehbg --randomize /home/rem/.wallpaper
+exec_always DISPLAY=:0 /usr/bin/feh --bg-max --no-fehbg --randomize /home/rem/.wallpaper/*
 exec fcitx

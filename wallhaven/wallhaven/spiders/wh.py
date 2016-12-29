@@ -6,7 +6,7 @@ from wallhaven.items import WallhavenItem
 class WhSpider(scrapy.Spider):
     name = "wh"
     allowed_domains = ["wallhaven.cc"]
-    resolution = '1280x800'
+    resolution = '1920x1080'
     start_urls = ['https://alpha.wallhaven.cc/search?categories=100&purity=100&resolutions=%s&sorting=random&order=desc' % resolution]
 
     def parse(self, response):

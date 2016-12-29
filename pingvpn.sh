@@ -1,11 +1,11 @@
 #!/bin/bash
 echo 'This is for testing speed of given openvpn files'
-DefaultFolder=$HOME/openvpn
+DefaultFolder=$HOME/openvpn/Open_TCP
 while getopts ":f" optname
 do
     case "$optname" in
         "f")
-            DefaultFolder=$HOME/openvpn/fast
+            DefaultFolder=$HOME/openvpn/Open_TCP/fast
             ;;
     esac
 done
