@@ -12,7 +12,7 @@ if [ -z $active ]; then
         fi
         tmp=$(echo $file_a|awk -F / '{print $NF}')
         echo -n $tmp:
-        speed[$i]=$(ping -c 4 $(sudo awk 'BEGIN{FS="="}/remote/{print $2}' ${file_a} |awk 'BEGIN{FS=":"}{print $1}')|tail -n 1|awk -F / '{print $5}'|awk -F . '{print $1}')
+        speed[$i]=$(ping -c 4 $(sudo awk -F '[:=]' '/remote/{print $2}' ${file_a})|tail -n 1|awk -F '[/.]' '{print $8}')
         files[$i]=$(echo ${file_a}|awk -F / '{print $5}')
         echo -n ${speed[$i]}"ms | "
         ((i++))
