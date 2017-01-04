@@ -15,6 +15,11 @@ if [ -z $active ]; then
         speed[$i]=$(ping -c 4 $(sudo awk -F '[:=]' '/remote/{print $2}' ${file_a})|tail -n 1|awk -F '[/.]' '{print $8}')
         files[$i]=$(echo ${file_a}|awk -F / '{print $5}')
         echo -n ${speed[$i]}"ms | "
+        if [ ${speed[$i]} -lt 49 ]; then
+            echo $tmp" is fast , skip the rest & starting connection"
+            nmcli con up id $tmp
+            exit;
+        fi
         ((i++))
     done
     echo ""
@@ -31,5 +36,14 @@ if [ -z $active ]; then
     nmcli con up id ${files[$pos]}
 else
     echo "vpn connection already exist! connection id is "$active
+    echo "do you wanna close it? (y/n)"
+    old_stty_cfg=$(stty -g)
+    stty raw -echo
+    answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
+    stty $old_stty_cfg
+    if echo "$answer" | grep -iq "^y" ;then
+        echo "closing..."
+        nmcli con down id $active
+    fi
 fi
 
