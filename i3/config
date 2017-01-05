@@ -92,7 +92,7 @@ bindsym $mod+a focus parent
 # start chromium
 bindsym $mod+c exec chromium
 # start emacs
-bindsym $mod+m exec emacs
+bindsym $mod+m exec "LC_CTYPE=zh_CN.UTF-8 emacs"
 
 # focus the child container
 #bindsym $mod+d focus child
