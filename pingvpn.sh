@@ -14,8 +14,8 @@ if [ -z $active ]; then
         echo -n $tmp:
         speed[$i]=$(ping -c 4 $(sudo awk -F '[:=]' '/remote/{print $2}' ${file_a})|tail -n 1|awk -F '[/.]' '{print $8}')
         files[$i]=$(echo ${file_a}|awk -F / '{print $5}')
-        echo -n ${speed[$i]}"ms | "
-        if [ ${speed[$i]} -lt 49 ]; then
+        echo -n ${speed[$i]:-'Unreachable '}"ms | "
+        if [ ${speed[$i]:-99999} -lt 9 ]; then
             echo $tmp" is fast , skip the rest & starting connection"
             nmcli con up id $tmp
             exit;
