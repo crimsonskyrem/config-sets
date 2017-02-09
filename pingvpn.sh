@@ -12,10 +12,16 @@ if [ -z $active ]; then
         fi
         tmp=$(echo $file_a|awk -F / '{print $NF}')
         echo -n $tmp:
-        speed[$i]=$(ping -c 4 $(sudo awk -F '[:=]' '/remote/{print $2}' ${file_a})|tail -n 1|awk -F '[/.]' '{print $8}')
+        tmpSpeed=$(ping -c 4 $(sudo awk -F '[:=]' '/remote/{print $2}' ${file_a})|tail -n 1|awk -F '[/.]' '{print $8}')
+        if [ -z $tmpSpeed ]; then
+            speed[$i]=9999
+            echo -n "Unreachable | "
+        else
+            speed[$i]=$tmpSpeed
+            echo -n $tmpSpeed"ms | "
+        fi
         files[$i]=$(echo ${file_a}|awk -F / '{print $5}')
-        echo -n ${speed[$i]:-'Unreachable '}"ms | "
-        if [ ${speed[$i]:-99999} -lt 49 ]; then
+        if [ ${speed[$i]} -lt 49 ]; then
             echo $tmp" is fast , skip the rest & starting connection"
             nmcli con up id $tmp
             exit;
@@ -27,7 +33,7 @@ if [ -z $active ]; then
     pos=0
     index=$[${#speed[*]}-1]
     for j in `seq 1 $index`; do
-        if [ $min -gt ${speed[$j]:-99999} ]; then
+        if [ $min -gt ${speed[$j]} ]; then
             min=${speed[$j]}
             pos=$j
         fi
