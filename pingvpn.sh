@@ -27,7 +27,7 @@ if [ -z $active ]; then
     pos=0
     index=$[${#speed[*]}-1]
     for j in `seq 1 $index`; do
-        if [ $min -gt ${speed[$j]} ]; then
+        if [ $min -gt ${speed[$j]:-99999} ]; then
             min=${speed[$j]}
             pos=$j
         fi
