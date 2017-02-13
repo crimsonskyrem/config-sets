@@ -1,7 +1,31 @@
 #!/bin/bash
+
 echo 'vpn script is running'
-active=$(nmcli con show --active |grep vpn|awk '{print $1}')
-if [ -z $active ]; then
+
+OPT_T=false
+OPT_S=false
+
+function HELP {
+    echo -e \\n"This is help message,you've just typed wrong args in this command."\\n
+    echo -e \\n""\\n
+    exit 1
+}
+
+function CONNECT {
+    echo 'connect'$1
+    exit
+    nmcli con up id $1
+}
+
+function STRAIGHT {
+    if [ $1 -lt 49 ]; then
+        echo $2 " is fast , skip the rest & starting connection"
+        CONNECT $2
+        exit
+    fi
+}
+
+function PING {
     DefaultFolder=/etc/NetworkManager/system-connections
     speed=()
     files=()
@@ -20,14 +44,15 @@ if [ -z $active ]; then
             speed[$i]=$tmpSpeed
             echo -n $tmpSpeed"ms | "
         fi
-        files[$i]=$(echo ${file_a}|awk -F / '{print $5}')
-        if [ ${speed[$i]} -lt 49 ]; then
-            echo $tmp" is fast , skip the rest & starting connection"
-            nmcli con up id $tmp
-            exit;
+        if [ $OPT_T = false ]; then
+            STRAIGHT ${speed[$i]} $tmp
         fi
+        files[$i]=$(echo ${file_a}|awk -F / '{print $5}')
         ((i++))
     done
+}
+
+function FINDMIN {
     echo ""
     min=${speed[0]}
     pos=0
@@ -39,17 +64,57 @@ if [ -z $active ]; then
         fi
     done
     echo "starting connection to "${files[$pos]}
-    nmcli con up id ${files[$pos]}
-else
-    echo "vpn connection already exist! connection id is "$active
-    echo "do you wanna close it? (y/n)"
-    old_stty_cfg=$(stty -g)
-    stty raw -echo
-    answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
-    stty $old_stty_cfg
-    if echo "$answer" | grep -iq "^y" ;then
-        echo "closing..."
-        nmcli con down id $active
-    fi
-fi
+    CONNECT ${files[$pos]}
 
+}
+
+function SELECT {
+    echo 'select mode'
+}
+
+function MAIN {
+    active=$(nmcli con show --active |grep vpn|awk '{print $1}')
+    if [ -z $active ]; then
+        PING
+        if [ $OPT_S = true ]; then
+            SELECT
+        else
+            FINDMIN
+        fi
+    else
+        echo "vpn connection already exist! connection id is "$active
+        echo "do you wanna close it? (y/n)"
+        old_stty_cfg=$(stty -g)
+        stty raw -echo
+        answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
+        stty $old_stty_cfg
+        if echo "$answer" | grep -iq "^y" ;then
+            echo "closing..."
+            nmcli con down id $active
+        fi
+    fi
+}
+
+
+while getopts 'tsh' FLAG; do
+    case $FLAG in
+        t)
+            echo 'speed testing mode, only ping remote'
+            OPT_T=true
+            PING
+            exit
+            ;;
+        s)
+            OPT_S=true
+            echo 'selection mode, ping every remote,and manually choose'
+            ;;
+        h)
+            HELP
+            ;;
+        \?)
+            echo 'wrong argument,please type -h to get more help'
+            exit
+            ;;
+    esac
+done
+MAIN
