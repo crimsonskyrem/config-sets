@@ -4,16 +4,15 @@ echo 'vpn script is running'
 
 OPT_T=false
 OPT_S=false
+DefaultFolder=/etc/NetworkManager/system-connections
 
 function HELP {
-    echo -e \\n"This is help message,you've just typed wrong args in this command."\\n
+    echo "This is help message"
     echo -e \\n""\\n
-    exit 1
+    exit
 }
 
 function CONNECT {
-    echo 'connect'$1
-    exit
     nmcli con up id $1
 }
 
@@ -26,7 +25,6 @@ function STRAIGHT {
 }
 
 function PING {
-    DefaultFolder=/etc/NetworkManager/system-connections
     speed=()
     files=()
     i=0
@@ -44,7 +42,7 @@ function PING {
             speed[$i]=$tmpSpeed
             echo -n $tmpSpeed"ms | "
         fi
-        if [ $OPT_T = false ]; then
+        if [ $OPT_S = false ]; then
             STRAIGHT ${speed[$i]} $tmp
         fi
         files[$i]=$(echo ${file_a}|awk -F / '{print $5}')
@@ -69,7 +67,22 @@ function FINDMIN {
 }
 
 function SELECT {
+    echo ""
     echo 'select mode'
+    domain=()
+    seq=0
+    for file_a in ${DefaultFolder}/*; do
+        tmp=$(echo $file_a|awk -F / '{print $NF}')
+        echo $seq"."$tmp
+        domain[$seq]=$tmp
+        ((seq++))
+    done
+    read -p 'type number to connect:' num
+    while [ $num -gt $[$seq-1] ]
+    do
+        read -p 'your input is wrong, please try again:' num
+    done
+    CONNECT ${domain[$num]}
 }
 
 function MAIN {
@@ -106,13 +119,13 @@ while getopts 'tsh' FLAG; do
             ;;
         s)
             OPT_S=true
-            echo 'selection mode, ping every remote,and manually choose'
+            echo 'selection mode, ping every domain,and manually choose'
             ;;
         h)
             HELP
             ;;
         \?)
-            echo 'wrong argument,please type -h to get more help'
+            echo 'wrong argument,please type -h for more help'
             exit
             ;;
     esac
