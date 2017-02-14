@@ -8,7 +8,9 @@ DefaultFolder=/etc/NetworkManager/system-connections
 
 function HELP {
     echo "This is help message"
-    echo -e \\n""\\n
+    echo "for now there is 2 options available"
+    echo "    -s for selection mode, this will ping every remote server, and then manually select your ideal server"
+    echo "    -t for speed test mode, this will only ping remote server, and exit."
     exit
 }
 
@@ -77,10 +79,10 @@ function SELECT {
         domain[$seq]=$tmp
         ((seq++))
     done
-    read -p 'type number to connect:' num
+    read -p 'type number to connect: ' num
     while [ $num -gt $[$seq-1] ]
     do
-        read -p 'your input is wrong, please try again:' num
+        read -p 'Wrong argument, please try again: ' num
     done
     CONNECT ${domain[$num]}
 }
@@ -112,20 +114,20 @@ function MAIN {
 while getopts 'tsh' FLAG; do
     case $FLAG in
         t)
-            echo 'speed testing mode, only ping remote'
+            echo 'Speed test mode, only ping remote'
             OPT_T=true
             PING
             exit
             ;;
         s)
             OPT_S=true
-            echo 'selection mode, ping every domain,and manually choose'
+            echo 'Selection mode, ping every domain, then manually select remote server'
             ;;
         h)
             HELP
             ;;
         \?)
-            echo 'wrong argument,please type -h for more help'
+            echo 'Wrong argument,try -h for more help'
             exit
             ;;
     esac
