@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo 'vpn script is running'
-
 OPT_T=false
 OPT_S=false
 DefaultFolder=/etc/NetworkManager/system-connections
@@ -15,6 +13,7 @@ function HELP {
 }
 
 function CONNECT {
+    echo "starting connection to "$1
     nmcli con up id $1
 }
 
@@ -44,7 +43,7 @@ function PING {
             speed[$i]=$tmpSpeed
             echo -n $tmpSpeed"ms | "
         fi
-        if [ $OPT_S = false ]; then
+        if [ $OPT_T = false ]; then
             STRAIGHT ${speed[$i]} $tmp
         fi
         files[$i]=$(echo ${file_a}|awk -F / '{print $5}')
@@ -63,7 +62,6 @@ function FINDMIN {
             pos=$j
         fi
     done
-    echo "starting connection to "${files[$pos]}
     CONNECT ${files[$pos]}
 
 }
