@@ -119,6 +119,7 @@ while getopts 'tsh' FLAG; do
             ;;
         s)
             OPT_S=true
+            OPT_T=true
             echo 'Selection mode, ping every domain, then manually select remote server'
             ;;
         h)
