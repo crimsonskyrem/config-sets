@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 sudo mount -t vboxsf VM_Connected ~/VM_Connected
 
 VBoxClient-all
