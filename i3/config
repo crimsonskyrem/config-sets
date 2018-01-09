@@ -163,4 +163,4 @@ bar {
 }
 
 exec_always DISPLAY=:0 /usr/bin/feh --bg-max --no-fehbg --randomize /home/rem/.wallpaper/*
-exec fcitx
+exec ibus-daemon --xim

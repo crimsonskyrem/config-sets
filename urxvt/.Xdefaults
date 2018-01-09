@@ -8,7 +8,9 @@ URxvt*boldItalicFont: xft:Inconsolata\ for\ Powerline:bold:italic:pixelsize=18:a
 URxvt.inheritPixmap: true
 URxvt.shading:25
 URxvt.tintColor: #657b83
-
+!inputMethod
+URxvt.inputMethod: ibus
+URxvt.preeditType: OnTheSpot,None
 ! do not scroll with output
 URxvt*scrollTtyOutput: false
 
