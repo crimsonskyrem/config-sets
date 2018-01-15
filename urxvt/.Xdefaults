@@ -1,5 +1,5 @@
 URxvt.scrollBar:False
-URxvt*font: xft:Inconsolata\ for\ Powerline:pixelsize=18:antialias=true,xft:wqy-yahei:bold:pixelsize=18:antialias=true
+URxvt*font: xft:Inconsolata\ for\ Powerline:pixelsize=18:antialias=true,xft:wqy-yahei:bold:pixelsize=18:antialias=true,xft:Symbola
 URxvt*boldFont: xft:Inconsolata\ for\ Powerline:bold:pixelsize=18:antialias=true
 URxvt*imFont: xft:Inconsolata\ for\ Powerline:bold:pixelsize=18:antialias=true
 URxvt*italicFont: xft:Inconsolata\ for\ Powerline:bold:italic:pixelsize=18:antialias=true

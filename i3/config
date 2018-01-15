@@ -164,3 +164,4 @@ bar {
 
 exec_always DISPLAY=:0 /usr/bin/feh --bg-max --no-fehbg --randomize /home/rem/.wallpaper/*
 exec ibus-daemon --xim
+exec compton --config ~/.config/compton.conf -b
